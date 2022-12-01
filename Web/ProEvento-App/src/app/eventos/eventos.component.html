@@ -1,21 +1,33 @@
 <h2>Eventos</h2>
 <hr>
 
-<form action="" class="form-inline">
+<div action="" class="form-inline">
   <div class="form-group mb-2">
-    <input type="text" class="form-control mr-2" placeholder="buscar">
+    <label class="mr-2">Filtro: </label>
+    <input
+      type="text"
+      class="form-control mr-2"
+      placeholder="buscar"
+      [(ngModel)]="filtroLista"
+     >
 
     <!-- btn.btn.btn-outline-success -->
     <button class="btn btn-outline-success">Buscar</button>
   </div>
-</form>
+</div>
+
+<!-- <h3>Filtro: {{filtroLista}}</h3> -->
 
 <!-- table.table.striped>thead.thead-dark>th*8 -->
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
+      <th>
+        <button type="button" class="btn btn-outline-light btn-sm" (click)="alterViewImage()">
+          {{!viewImage ? 'Exibir' : 'Ocultar'}}
+        </button>
+      </th>
       <th>#</th>
-      <th>Imagem</th>
       <th>Tema</th>
       <th>Local</th>
       <th>Data</th>
@@ -25,18 +37,37 @@
     </tr>
   </thead>
   <!-- tbody>tr>td*8 -->
-  <tbody *ngFor="let evento of eventos">
-    <tr>
+  <tbody *ngIf="eventos && eventos.length">
+    <tr *ngFor="let evento of eventosFiltrados">
+      <td>
+        <img [collapse]="!viewImage"
+             [isAnimated]="true"
+          src="/assets/{{evento.imagemURL}}"
+          alt="{{evento.imagemURL}}"
+          [style.width.px]="widthImg"
+          [style.margin.px]="margimImg"
+        >
+      </td>
       <td>{{evento.eventoId}}</td> <!-- Interpolação -->
-      <td>{{evento.imagemURL}}</td>
       <td>{{evento.tema}}</td>
       <td>{{evento.local}}</td>
-      <td>{{evento.data}}</td>
+      <td>{{evento.dataEvento}}</td>
       <td>{{evento.qtdPessoas}}</td>
       <td>{{evento.lote}}</td>
-      <td></td>
+      <td>
+        <button class="btn btn-primary btn-sm mr-2">Editar</button>
+        <button class="btn btn-danger btn-sm">Excluir</button>
+      </td>
     </tr>
   </tbody>
+  <tfoot *ngIf="!eventos.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum evento encontrado</h4>
+      </td>
+    </tr>
+  </tfoot>
+
 </table>
 
 <!-- Diretivas estruturais
@@ -44,3 +75,5 @@
   *ngFor
   *ngShow
 -->
+
+<!-- {{eventos | json}} -->
